@@ -7,9 +7,9 @@ import { Logo } from "./Logo";
 import { site, topNav, learnSidebar, communitySidebar } from "@/content/site";
 
 function toggleTheme() {
-  const dark = document.documentElement.classList.toggle("dark");
+  const day = document.documentElement.classList.toggle("day");
   try {
-    localStorage.setItem("theme", dark ? "dark" : "light");
+    localStorage.setItem("theme", day ? "light" : "dark");
   } catch {}
 }
 
@@ -19,16 +19,15 @@ export function TopNav() {
   const close = () => setOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-wash dark:bg-wash-dark border-b border-border dark:border-border-dark">
-      <nav className="flex items-center gap-[0.9rem] h-[4.5rem] px-[0.9rem] lg:px-[1.8rem] max-w-[90rem] mx-auto">
+    <header className="masthead">
+      <nav className="masthead-nav">
         <button
-          className="lg:hidden p-[0.45rem] -ml-[0.45rem] hover:opacity-60"
+          className="menu-btn"
           aria-label="メニュー"
           aria-expanded={open}
           onClick={() => setOpen(!open)}
         >
           <svg
-            className="w-6 h-6"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -41,28 +40,22 @@ export function TopNav() {
             )}
           </svg>
         </button>
-        <Link
-          href="/"
-          onClick={close}
-          className="flex items-center gap-[0.45rem] font-black italic text-lg whitespace-nowrap hover:text-link dark:hover:text-link-dark"
-        >
-          <Logo className="w-[1.8rem] h-[1.8rem] text-primary dark:text-primary-dark" />
+        <Link href="/" onClick={close} className="brand">
+          <Logo />
           {site.name}
         </Link>
-        <div className="hidden lg:flex flex-1 justify-center">
-          <span className="text-sm font-black tracking-[0.3em] text-uni dark:text-primary-dark">
-            {site.tagline}
-          </span>
+        <div className="tagline-wrap">
+          <span className="tagline">{site.tagline}</span>
         </div>
-        <div className="flex-1 lg:flex-none" />
-        <ul className="hidden lg:flex items-center gap-[0.45rem]">
+        <div className="nav-spacer" />
+        <ul className="nav-list">
           {topNav.map((item) => {
             const active = pathname.startsWith(item.href);
             return (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`px-[0.9rem] py-[0.45rem] font-medium ${active ? "font-bold text-bloom dark:text-link-dark border-b-[3px] border-bloom" : "hover:opacity-60"}`}
+                  className={`nav-item${active ? " is-active" : ""}`}
                 >
                   {item.label}
                 </Link>
@@ -73,10 +66,10 @@ export function TopNav() {
         <button
           onClick={toggleTheme}
           aria-label="テーマ切り替え"
-          className="p-[0.45rem] hover:opacity-60"
+          className="theme-btn"
         >
           <svg
-            className="w-6 h-6 dark:hidden"
+            className="icon-moon"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -85,7 +78,7 @@ export function TopNav() {
             <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
           </svg>
           <svg
-            className="w-6 h-6 hidden dark:block"
+            className="icon-sun"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -95,37 +88,28 @@ export function TopNav() {
             <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
           </svg>
         </button>
-        <a
-          href={site.github}
-          className="p-[0.45rem] text-sm font-black tracking-[0.3em] hover:opacity-60"
-        >
+        <a href={site.github} className="github-link">
           GitHub
         </a>
       </nav>
       {open && (
-        <div className="lg:hidden max-h-[calc(100vh-4.5rem)] overflow-y-auto border-t border-border dark:border-border-dark px-[0.9rem] py-[0.9rem]">
+        <div className="menu-panel">
           {[...learnSidebar, ...communitySidebar].map((s) => (
-            <div key={s.title} className="mb-[0.9rem]">
-              <p className="px-[0.9rem] mb-[0.45rem] text-sm font-black tracking-[0.3em] text-uni dark:text-primary-dark">
-                {s.title}
-              </p>
+            <div key={s.title} className="menu-group">
+              <p className="menu-label">{s.title}</p>
               {s.items.map((i) => (
                 <Link
                   key={i.href}
                   href={i.href}
                   onClick={close}
-                  className="block px-[0.9rem] py-[0.45rem] border-l-[3px] border-transparent hover:bg-card dark:hover:bg-card-dark"
+                  className="menu-item"
                 >
                   {i.label}
                 </Link>
               ))}
             </div>
           ))}
-          <Link
-            href="/blog"
-            onClick={close}
-            className="block px-[0.9rem] py-[0.45rem] font-bold hover:bg-card dark:hover:bg-card-dark"
-          >
+          <Link href="/blog" onClick={close} className="menu-item menu-item--blog">
             ブログ
           </Link>
         </div>

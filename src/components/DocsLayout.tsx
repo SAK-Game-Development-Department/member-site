@@ -18,11 +18,11 @@ export function DocsLayout({
   const next = idx >= 0 ? flat[idx + 1] : undefined;
 
   return (
-    <div className="flex max-w-[90rem] mx-auto">
-      <aside className="hidden lg:block w-72 shrink-0 sticky top-[4.5rem] h-[calc(100vh-4.5rem)] overflow-y-auto border-r border-border dark:border-border-dark px-[0.9rem] py-[1.8rem]">
+    <div className="docs">
+      <aside className="docs-aside">
         {sidebar.map((s) => (
-          <div key={s.title} className="mb-[1.35rem]">
-            <p className="px-[0.9rem] mb-[0.45rem] text-sm font-black tracking-[0.3em] text-uni dark:text-primary-dark">
+          <div key={s.title} className="docs-group">
+            <p className="docs-label">
               {s.title}
             </p>
             <ul>
@@ -33,7 +33,7 @@ export function DocsLayout({
                     <Link
                       href={i.href}
                       aria-current={active ? "page" : undefined}
-                      className={`block px-[0.9rem] py-[0.45rem] border-l-[3px] ${active ? "border-bloom text-bloom dark:text-link-dark font-bold" : "border-transparent hover:opacity-60"}`}
+                      className={`docs-item${active ? " is-active" : ""}`}
                     >
                       {i.label}
                     </Link>
@@ -44,10 +44,10 @@ export function DocsLayout({
           </div>
         ))}
       </aside>
-      <main className="flex-1 min-w-0 px-[1.35rem] sm:px-[3.6rem] py-[3.6rem]">
-        <article className="doc max-w-[45rem] mx-auto">{children}</article>
+      <main className="docs-main">
+        <article className="doc">{children}</article>
         {(prev || next) && (
-          <nav className="max-w-[45rem] mx-auto mt-[3.6rem] grid sm:grid-cols-2 gap-[0.9rem]">
+          <nav className="pager">
             {prev ? <PagerLink item={prev} label="前へ" /> : <span />}
             {next && <PagerLink item={next} label="次へ" right />}
           </nav>
@@ -69,12 +69,12 @@ function PagerLink({
   return (
     <Link
       href={item.href}
-      className={`block p-[1.35rem] border-[1.5px] border-border dark:border-border-dark hover:opacity-60 ${right ? "text-right" : ""}`}
+      className={`pager-link${right ? " is-next" : ""}`}
     >
-      <span className="block text-sm font-black tracking-[0.3em] text-uni dark:text-primary-dark">
+      <span className="pager-label">
         {label}
       </span>
-      <span className="font-bold italic text-lg text-primary dark:text-primary-dark">
+      <span className="pager-title">
         {item.label}
       </span>
     </Link>

@@ -17,11 +17,11 @@ export default function Page() {
       <h2>活動の柱</h2>
       <ul>
         <li>
-          <Link href="/learn/games">ゲーム開発</Link> —
+          <Link href="/learn/games">ゲーム開発</Link>。
           チームでゲームを企画・制作・公開する
         </li>
         <li>
-          <Link href="/learn/ai">AI開発</Link> — 機械学習やLLMをゲームに組み込む
+          <Link href="/learn/ai">AI開発</Link>。機械学習やLLMをゲームに組み込む
         </li>
       </ul>
       <h2>普段の活動</h2>

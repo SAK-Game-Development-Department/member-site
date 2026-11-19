@@ -19,7 +19,7 @@ export default function Page() {
         </li>
         <li>
           <strong>入会の流れ</strong>
-          <ol className="list-decimal pl-[1.35rem] my-[0.9rem]">
+          <ol>
             <li>
               代表または分野リーダーへ「志望理由」および「これまでの活動・実績」を伝えてください。
             </li>
@@ -78,7 +78,7 @@ export default function Page() {
 
       <h2 id="prohibited">4. 禁止事項と違反時の対応</h2>
       <p>円滑なサークル運営のため、以下の行為を禁止します。</p>
-      <ol className="list-decimal pl-[1.35rem] my-[1.8rem] space-y-[0.45rem]">
+      <ol className="steps">
         <li>大会参加や論文執筆における不正行為（ズル・盗用等）</li>
         <li>共有リソースの不正利用および外部への提供・流出</li>
         <li>メンバーに対するあらゆるハラスメント行為</li>
@@ -88,7 +88,7 @@ export default function Page() {
       <p>
         問題が発生した場合、代表1人の判断ではなく役員で協議の上、本人からの弁明も聞いた上で以下の段階的対応を行います。
       </p>
-      <ol className="list-decimal pl-[1.35rem] my-[1.8rem] space-y-[0.45rem]">
+      <ol className="steps">
         <li>口頭・DMによる注意</li>
         <li>一定期間の活動・共有リソース利用停止</li>
         <li>強制退会</li>
@@ -127,7 +127,7 @@ export default function Page() {
         </li>
       </ul>
 
-      <p className="mt-[2.7rem] text-base!">施行日：2026年11月11日</p>
+      <p className="note">施行日：2026年11月11日</p>
     </>
   );
 }

@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 };
 
 // 描画前に面を決めてちらつきを防ぐ。開きの面は夜面(墨)。
-// 保存または環境が昼を求めるときだけ、昼面(薄桃)で開く。
-const themeScript = `try{var t=localStorage.getItem("theme");if(!(t==="light"||(!t&&matchMedia("(prefers-color-scheme: light)").matches)))document.documentElement.classList.add("dark")}catch(e){}`;
+// 保存または環境が昼を求めるときだけ、昼面(薄桃)の day クラスで開く。
+const themeScript = `try{var t=localStorage.getItem("theme");if(t==="light"||t==="day"||(!t&&matchMedia("(prefers-color-scheme: light)").matches))document.documentElement.classList.add("day")}catch(e){}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
@@ -31,18 +31,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="min-h-screen flex flex-col">
+      <body>
         <TopNav />
-        <div className="flex-1">{children}</div>
-        <footer className="border-t-[3px] border-ink dark:border-ground bg-wash dark:bg-wash-dark">
-          <div className="max-w-6xl mx-auto px-[1.35rem] py-[2.25rem] flex flex-col sm:flex-row gap-[0.9rem] justify-between text-sm text-secondary dark:text-secondary-dark">
+        <div className="page">{children}</div>
+        <footer className="footer">
+          <div className="footer-meta">
             <p>© {site.name}</p>
-            <p className="font-black tracking-[0.3em] text-uni dark:text-primary-dark">
+            <p className="imprint">
               165 BPM / 1 BEAT 0.36S / BEAT 0.9REM
             </p>
-            <a href={site.github} className="hover:opacity-60">
-              GitHub
-            </a>
+            <a href={site.github}>GitHub</a>
           </div>
         </footer>
       </body>

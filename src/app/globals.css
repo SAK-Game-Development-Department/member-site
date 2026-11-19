@@ -1,29 +1,32 @@
-@import "tailwindcss";
-
-@custom-variant dark (&:where(.dark, .dark *));
-
 /*
-  野花の記法 — official-site 統合（十箇条の条文）
-  「Wildest Flower」MV分析由来のUI言語。member-site 試験適用 v2 を本サイトの構造に統合した。
+  野花の記法 平文CSSによる全面構築し直し（2026-11-19）
+
+  「Wildest Flower」MV分析由来のUI言語。このファイルはTailwindのビルドに頼らず、
+  記法の条文をそのままCSSとして書き下した。@theme も @apply も使わない。
+  ユーティリティクラス（px-[1.35rem] 等）は廃止し、 TSX は意味クラス（cover / chapter / doc…）
+  を参照する。package.json/package-lock.json は変えないので npm ci は従来どおり可能
+  （tailwindcss は未使用の devDependency として残る。手元で lock の更新をして外してよい）。
 
   第一条(色)  色は五色だけ。CSS変数を唯一の色源に。
-  第二条(拍)  余白は拍できざむ。--beat(0.9rem) の整数倍・半分倍のみ
-  第三条(罫)  罫は三段。面3px / 行1.5px / 糸1px。罫は字の色に従う
-  第四条(数)  数は輪郭の大書にする（塗らない）。いちばんの塗りは名前だけ
-  第五条(鏡)  鏡像は額で対として立つ。同型・同罫で、地と字だけを交換する
-  第六条(褪)  確定していない記録は色を抜く（opacity .5）。消しはしない
-  第七条(現物) 影・角丸・グラデ・テクスチャはメッキ。貼らない
-  第八条(拍動) 1拍 = 60÷165 = 0.36s。動きは opacity と translate だけ、一度見えたら隠さない
-  第九条(前傾) 進む文字だけ前に傾ける（italic）。ラベル・記録・注記は直立
-  第十条(写真) 写真は色の経済の外の実像。額は面の罫。色も形もいじらない
+  第二条(拍)  余白は拍できざむ。このCSSでは計算式 calc(var(--beat) * N) で書き、
+              整数倍・半分倍だけを構造的に強制する。数値の直書きはしない。
+  第三条(罫)  罫は三段。面3px / 行1.5px / 糸1px。罫は字の色に従う（すべて var(--text)）。
+  第四条(数)  数は輪郭の大書（-webkit-text-stroke で塗らない）。
+              いちばんの塗りは名前だけ。
+  第五条(鏡)  鏡像は額で対として立つ。面の交換は「--face/--text の交換」として書く。
+              対は同型・同罫で、地と字だけを交換する。
+  第六条(褪)  確定していない記録は色を抜く（opacity .5）。消しはしない。
+  第七条(現物) 影・角丸・グラデ・テクスチャはメッキ。貼らない。
+  第八条(拍動) 1拍 = 60÷165 = 0.36s（--sec）。動きは opacity と translate だけ、
+              2拍の整数速度で、一度見えたら隠さない。
+  第九条(前傾) 進む文字だけ前に傾ける（italic）。ラベル・期日・記録・注記は直立。
+  第十条(写真) 写真は色の経済の外の実像。額は面の罫。色も形もいじらない。
 
   面について（夜基調）:
   頁は夜面を開きの面とする。昼面は切替・保存・環境設定で開く「交換の面」。
   夜面 = 墨の面　（地 #161616 / 字 #FFE9F0）＝ 開きの面
   昼面 = 薄桃の面（地 #FFE9F0 / 字 #161616）＝ 交換で開く面
   字と面の対比は両面で対称（15.65:1）。面の交換は同型・同罫・対等（第五条）。
-  旧トークン名（wash/card/link/border…）は編集範囲を最小化するためそのまま残し、
-  すべて五色に再結線した。色の追加はしていない（第一条の記録）。
 
   語彙の面別配分（対比実測に基づく）:
   強調は花の一色のみ。花は夜面で 5.45:1 と本領を鳴らし、昼面では 2.87:1 と
@@ -40,90 +43,139 @@
   react.dev風パレット（#087ea4 などリンク青・#e6f7ff など）は不採用。
   青は制服 #4A6FA5 に、選択色は花 #F2508F に一本化した。
   夜焼け（制服を color-mix で薄桃へ再照明する案）は不採用。hex定点を壊し六色目を作る。
-  CSS変数 --beat --sec は色ではなく拍と秒の単位（第二条・第八条）。
+  --beat --sec は色ではなく拍と秒の単位（第二条・第八条）。
 */
 
-@theme {
-  /* 第一条: 五色 */
-  --color-ground: #ffe9f0; /* 地: MV平坦カットの薄桃背景 */
-  --color-ink: #161616; /* 墨: MVロゴの黒 */
-  --color-bloom: #f2508f; /* 花: 強調・選択色・左罫 */
-  --color-uni: #4a6fa5; /* 制服: 昼面のラベル・期日・本文リンク。夜面の字としては使わない */
-  --color-track: #6b5546; /* 土: 注記の落ちた色 */
-
-  /* 旧トークンの再結線（ライト面=薄桃、ダーク面=墨） */
-  --color-wash: #ffe9f0;
-  --color-wash-dark: #161616;
-  --color-primary: #161616;
-  --color-primary-dark: #ffe9f0;
-  --color-secondary: #6b5546;
-  --color-secondary-dark: rgba(255, 233, 240, 0.8); /* 夜の注記: 薄桃を沈ませる */
-  --color-link: #4a6fa5;
-  --color-link-dark: #f2508f;
-  --color-card: rgba(22, 22, 22, 0.04);
-  --color-card-dark: rgba(255, 233, 240, 0.07);
-  --color-border: #161616;
-  --color-border-dark: #ffe9f0;
-  --color-highlight: rgba(242, 80, 143, 0.15);
-  --color-highlight-dark: rgba(242, 80, 143, 0.2);
-
-  --font-sans: "DM Sans", "Noto Sans JP", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", "Hiragino Sans", "Yu Gothic UI", sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
-
+/* ========== 第一条 五色 ========== */
 :root {
-  --beat: 0.9rem; /* 第二条: 1拍 */
-  --sec: 0.36s; /* 第八条: BPM165 → 60÷165 */
+  --ground: #ffe9f0; /* 地: MV平坦カットの薄桃背景 */
+  --ink: #161616; /* 墨: MVロゴの黒 */
+  --bloom: #f2508f; /* 花: 強調・選択色・罫 */
+  --uni: #4a6fa5; /* 制服: 昼面のラベル・期日・本文リンク */
+  --track: #6b5546; /* 土: 昼面専用の注記色 */
+
+  /* 第二条・第八条: 拍と秒 */
+  --beat: 0.9rem;
+  --sec: 0.36s;
+
+  /* 面（夜基調。開きの面 = 夜面） */
+  --face: var(--ink);
+  --text: var(--ground);
+  /* 夜面の同線: リンクは花、ラベルは字体で語り薄桃に、注記は薄桃を沈ませる */
+  --link: var(--bloom);
+  --label: var(--ground);
+  --note: rgba(255, 233, 240, 0.8);
+  --tint: rgba(255, 233, 240, 0.07);
 }
 
-/* 第四条: 数は塗らない。輪郭の大書 */
-.outline-ink {
-  -webkit-text-stroke: 2px var(--color-ink);
-  color: transparent;
-}
-.outline-ground {
-  -webkit-text-stroke: 2px var(--color-ground);
-  color: transparent;
-}
-/* 墨の面では輪郭の色を面の字色と交換する（第四条） */
-.dark .outline-ink {
-  -webkit-text-stroke-color: var(--color-ground);
-}
-.dark .outline-ground {
-  -webkit-text-stroke-color: var(--color-ink);
+/* 昼面（交換の面） */
+.day {
+  --face: var(--ground);
+  --text: var(--ink);
+  --link: var(--uni);
+  --label: var(--uni);
+  --note: var(--track);
+  --tint: rgba(22, 22, 22, 0.04);
 }
 
-/* 語彙: 選択色は花の一色 */
-::selection {
-  background: var(--color-bloom);
-  color: var(--color-ground);
+/* ========== 基礎（Tailwind廃止に伴う下ごしらえ） ========== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0 solid;
 }
-
-/* キーボードの焦点は面の罫で示す（影・角丸に頼らない。第七条） */
-:focus-visible {
-  outline: 3px solid var(--color-bloom);
-  outline-offset: 3px;
-}
-
-/* 柱が固定のぶん、anchorの着地に拍を足す */
 html {
-  scroll-padding-top: 6.3rem; /* 7拍 */
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  /* 柱が固定のぶん、anchorの着地に拍を足す */
+  scroll-padding-top: calc(var(--beat) * 7);
   scroll-behavior: smooth;
+}
+ul,
+ol {
+  list-style: none;
+}
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+img {
+  height: auto;
+}
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+button {
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+code,
+pre {
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
 }
 
 body {
-  @apply bg-wash text-primary dark:bg-wash-dark dark:text-primary-dark font-sans antialiased;
-  overflow-x: clip;
+  overflow-x: clip; /* 章の面罫が頁端まで走る（第三条） */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--face);
+  color: var(--text);
+  font-family:
+    "DM Sans",
+    "Noto Sans JP",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Hiragino Sans",
+    "Yu Gothic UI",
+    sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* 第八条: 動きは2拍。opacityとtranslateだけ。一度見えたら隠さない */
+/* 語彙: 選択色は花の一色（夜面・昼面とも） */
+::selection {
+  background: var(--bloom);
+  color: var(--ground);
+}
+/* キーボードの焦点は面の罫で示す（影・角丸に頼らない。第七条） */
+:focus-visible {
+  outline: 3px solid var(--bloom);
+  outline-offset: 3px;
+}
+
+/* ========== 第八条 拍動 ========== */
 [data-reveal] {
-  transition: opacity 0.72s, transform 0.72s;
+  transition:
+    opacity calc(var(--sec) * 2),
+    transform calc(var(--sec) * 2);
 }
 [data-reveal="hidden"] {
   opacity: 0;
-  transform: translateY(0.9rem);
+  transform: translateY(calc(var(--beat) * 1));
 }
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -136,47 +188,751 @@ body {
   }
 }
 
-/* ドキュメントページ本文（.doc）。罫と余白は拍で */
+/* ========== 柱（TopNav） ========== */
+.masthead {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--face);
+  border-bottom: 1px solid var(--text); /* 糸 */
+}
+.masthead-nav {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--beat) * 1);
+  height: calc(var(--beat) * 5);
+  padding-inline: calc(var(--beat) * 1);
+  max-width: 90rem;
+  margin-inline: auto;
+}
+@media (min-width: 64rem) {
+  .masthead-nav {
+    padding-inline: calc(var(--beat) * 2);
+  }
+}
+.menu-btn {
+  display: block;
+  padding: calc(var(--beat) * 0.5);
+  margin-left: calc(var(--beat) * -0.5);
+}
+.menu-btn:hover,
+.brand:hover,
+.theme-btn:hover,
+.github-link:hover {
+  opacity: 0.6; /* 第六条: 色を抜くだけで消しはしない */
+}
+.menu-btn svg,
+.theme-btn svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+@media (min-width: 64rem) {
+  .menu-btn {
+    display: none;
+  }
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--beat) * 0.5);
+  font-weight: 900;
+  font-style: italic; /* 第九条: 名前は前傾 */
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  white-space: nowrap;
+}
+.brand:hover {
+  color: var(--link);
+}
+.brand svg {
+  width: calc(var(--beat) * 2);
+  height: calc(var(--beat) * 2);
+  color: var(--text);
+}
+/* 昼面では月（昼へ誘う）、夜面では日（ステージ） */
+.icon-moon {
+  display: none;
+}
+.icon-sun {
+  display: block;
+}
+.day .icon-moon {
+  display: block;
+}
+.day .icon-sun {
+  display: none;
+}
+.tagline-wrap {
+  display: none;
+}
+@media (min-width: 64rem) {
+  .tagline-wrap {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+  }
+}
+.tagline {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.3em; /* ラベルの字体で語る */
+  color: var(--label);
+}
+.nav-spacer {
+  flex: 1;
+}
+@media (min-width: 64rem) {
+  .nav-spacer {
+    flex: none;
+  }
+}
+.nav-list {
+  display: none;
+  align-items: center;
+  gap: calc(var(--beat) * 0.5);
+}
+@media (min-width: 64rem) {
+  .nav-list {
+    display: flex;
+  }
+}
+.nav-item {
+  padding: calc(var(--beat) * 0.5) calc(var(--beat) * 1);
+  font-weight: 500;
+}
+.nav-item:hover {
+  opacity: 0.6;
+}
+.nav-item.is-active {
+  font-weight: 700;
+  color: var(--bloom);
+  border-bottom: 3px solid var(--bloom); /* 選択罫 = 面 */
+}
+.theme-btn {
+  padding: calc(var(--beat) * 0.5);
+}
+.github-link {
+  padding: calc(var(--beat) * 0.5);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+}
+.menu-panel {
+  max-height: calc(100vh - var(--beat) * 5);
+  overflow-y: auto;
+  border-top: 1px solid var(--text); /* 糸 */
+  padding: calc(var(--beat) * 1);
+}
+@media (min-width: 64rem) {
+  .menu-panel {
+    display: none;
+  }
+}
+.menu-group {
+  margin-bottom: calc(var(--beat) * 1);
+}
+.menu-label {
+  padding: 0 calc(var(--beat) * 1) calc(var(--beat) * 0.5);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+  color: var(--label);
+}
+.menu-item {
+  display: block;
+  padding: calc(var(--beat) * 0.5) calc(var(--beat) * 1);
+  border-left: 3px solid transparent;
+}
+.menu-item:hover {
+  background: var(--tint);
+}
+.menu-item--blog {
+  font-weight: 700;
+}
+
+/* ========== 本体の枠 ========== */
+.page {
+  flex: 1;
+}
+
+/* ========== 表紙 ========== */
+.cover {
+  padding: calc(var(--beat) * 1.5) calc(var(--beat) * 5) calc(var(--beat) * 6);
+  text-align: center;
+}
+@media (min-width: 64rem) {
+  .cover {
+    padding-top: calc(var(--beat) * 9);
+  }
+}
+.cover-logo {
+  width: calc(var(--beat) * 8);
+  height: calc(var(--beat) * 8);
+  margin-inline: auto;
+  color: var(--text);
+}
+@media (min-width: 64rem) {
+  .cover-logo {
+    width: calc(var(--beat) * 10);
+    height: calc(var(--beat) * 10);
+  }
+}
+/* 第四条: いちばんの塗りは名前だけ */
+.site-title {
+  margin-top: calc(var(--beat) * 2);
+  font-weight: 900;
+  font-style: italic;
+  font-size: 3rem;
+  line-height: 1.25;
+}
+@media (min-width: 64rem) {
+  .site-title {
+    font-size: 4.5rem;
+  }
+}
+.cover-tagline {
+  margin-top: calc(var(--beat) * 1.5);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+  color: var(--label);
+}
+.cover-lead {
+  margin-top: calc(var(--beat) * 2);
+  font-size: 1.5rem;
+  line-height: 1.375;
+}
+/* 折りは小さい面でのみ（面が広くなれば一息に読む） */
+@media (min-width: 40rem) {
+  .cover-lead br {
+    display: none;
+  }
+}
+@media (min-width: 64rem) {
+  .cover-lead {
+    font-size: 2.25rem;
+  }
+}
+
+/* ========== 第五条 鏡（額で対として立つ） ========== */
+.mirror {
+  margin-top: calc(var(--beat) * 3);
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(var(--beat) * 1);
+  justify-content: center;
+}
+/* 対は同型・同罫。地と字（--face/--text）だけを交換する */
+.cta {
+  display: inline-block;
+  padding: calc(var(--beat) * 1) calc(var(--beat) * 2);
+  border: 3px solid var(--text);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+.cta:hover {
+  opacity: 0.6;
+}
+.cta--fill {
+  background: var(--text);
+  color: var(--face);
+}
+.cta--outline {
+  background: transparent;
+  color: var(--text);
+}
+
+/* ========== 章 ========== */
+.chapter {
+  padding: calc(var(--beat) * 5) calc(var(--beat) * 1.5);
+  border-top: 3px solid var(--text); /* 章の面罫 */
+}
+@media (min-width: 64rem) {
+  .chapter {
+    padding-block: calc(var(--beat) * 7);
+  }
+}
+/* 面反転の章（昼の章）: 章の中で面の交換を起こす */
+.chapter--invert {
+  --face: var(--ground);
+  --text: var(--ink);
+  background: var(--face);
+  color: var(--text);
+  border-top: 3px solid var(--ink);
+}
+.day .chapter--invert {
+  --face: var(--ink);
+  --text: var(--ground);
+}
+.chapter-logo {
+  width: calc(var(--beat) * 5);
+  height: calc(var(--beat) * 5);
+  margin-inline: auto;
+  color: var(--text);
+}
+.chapter-invert-lead {
+  margin-top: calc(var(--beat) * 1.5);
+  max-width: 45rem;
+  margin-inline: auto;
+  text-align: center;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  margin-bottom: 0;
+}
+.chapter-cta {
+  margin-top: calc(var(--beat) * 3);
+  display: flex;
+  justify-content: center;
+}
+.chapter-inner {
+  max-width: 63rem;
+  margin-inline: auto;
+}
+.chapter-head {
+  display: flex;
+  align-items: baseline;
+  gap: calc(var(--beat) * 1.5);
+  margin-bottom: calc(var(--beat) * 3);
+}
+/* 第四条: 数は輪郭の大書。塗らない */
+.chapter-num {
+  font-weight: 900;
+  font-size: 3.6rem;
+  line-height: 1;
+  -webkit-text-stroke: 2px var(--text);
+  color: transparent;
+}
+.chapter-title {
+  font-weight: 900;
+  font-style: italic;
+  font-size: 1.875rem;
+  line-height: 1.25;
+}
+@media (min-width: 64rem) {
+  .chapter-title {
+    font-size: 2.25rem;
+  }
+}
+.chapter-intro {
+  max-width: 45rem;
+  margin: 0 auto calc(var(--beat) * 4);
+  text-align: center;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  color: var(--note);
+}
+.chapter-grid {
+  display: grid;
+  gap: calc(var(--beat) * 2);
+  align-items: center;
+}
+@media (min-width: 64rem) {
+  .chapter-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* 記録の行罫（頁頭語彙と同一） */
+.record-list {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  border-bottom: 1.5px solid var(--text); /* 行罫 */
+}
+.record-list li {
+  border-top: 1.5px solid var(--text);
+  padding-block: calc(var(--beat) * 1);
+}
+/* コードの額 */
+.code-frame {
+  border: 1.5px solid var(--text);
+  padding: calc(var(--beat) * 1.5);
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+/* ========== 触れた記録（告知の額） ========== */
+.post-grid {
+  display: grid;
+  gap: calc(var(--beat) * 1.5);
+}
+@media (min-width: 40rem) {
+  .post-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 64rem) {
+  .post-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.post-card {
+  display: block;
+  border: 1.5px solid var(--text);
+  padding: calc(var(--beat) * 1.5);
+}
+.post-card:hover {
+  opacity: 0.6;
+}
+.post-date {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+  color: var(--label);
+}
+.post-title {
+  margin-top: calc(var(--beat) * 0.5);
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+  font-style: italic;
+}
+.post-summary {
+  margin-top: calc(var(--beat) * 0.5);
+  color: var(--note);
+}
+
+/* ========== 文書頁（docs: learn / community） ========== */
+.docs {
+  display: flex;
+  max-width: 90rem;
+  margin-inline: auto;
+}
+.docs-aside {
+  display: none;
+  width: 18rem;
+  flex-shrink: 0;
+  position: sticky;
+  height: calc(100vh - var(--beat) * 5);
+  overflow-y: auto;
+  border-right: 1px solid var(--text); /* 糸 */
+  padding: calc(var(--beat) * 1) calc(var(--beat) * 2);
+}
+@media (min-width: 64rem) {
+  .docs-aside {
+    display: block;
+    top: calc(var(--beat) * 5);
+  }
+}
+.docs-group {
+  margin-bottom: calc(var(--beat) * 1.5);
+}
+.docs-label {
+  padding: 0 calc(var(--beat) * 1) calc(var(--beat) * 0.5);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+  color: var(--label);
+}
+.docs-item {
+  display: block;
+  padding: calc(var(--beat) * 0.5) calc(var(--beat) * 1);
+  border-left: 3px solid transparent;
+}
+.docs-item:hover {
+  opacity: 0.6;
+}
+.docs-item.is-active {
+  border-left-color: var(--bloom);
+  color: var(--bloom);
+  font-weight: 700;
+}
+.docs-main {
+  flex: 1;
+  min-width: 0;
+  padding: calc(var(--beat) * 4) calc(var(--beat) * 1.5);
+}
+@media (min-width: 40rem) {
+  .docs-main {
+    padding-inline: calc(var(--beat) * 4);
+  }
+}
+
+/* ========== 本文規則（.doc） ========== */
+.doc {
+  max-width: 45rem;
+  margin-inline: auto;
+}
 .doc h1 {
-  @apply font-black italic text-4xl lg:text-5xl leading-tight mb-[0.9rem] pb-[1.8rem] border-b-[3px] border-ink dark:border-ground;
+  font-weight: 900;
+  font-style: italic;
+  font-size: 2.25rem;
+  line-height: 1.25;
+  margin-bottom: calc(var(--beat) * 1);
+  padding-bottom: calc(var(--beat) * 2);
+  border-bottom: 3px solid var(--text);
+}
+@media (min-width: 64rem) {
+  .doc h1 {
+    font-size: 3rem;
+  }
 }
 .doc h2 {
-  @apply font-black italic text-3xl mt-[3.6rem] mb-[1.35rem];
+  font-weight: 900;
+  font-style: italic;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  margin-top: calc(var(--beat) * 4);
+  margin-bottom: calc(var(--beat) * 1.5);
 }
 .doc h3 {
-  @apply font-bold italic text-xl mt-[2.7rem] mb-[0.9rem];
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  margin-top: calc(var(--beat) * 3);
+  margin-bottom: calc(var(--beat) * 1);
 }
-/* 本文は字の色そのもの。土は注記に降ろす（語彙どおり） */
+/* 本文は字の色そのもの。注記は沈んだ色（--note）に降ろす */
 .doc p,
 .doc li {
-  @apply text-lg leading-[2] text-primary dark:text-primary-dark;
+  font-size: 1.125rem;
+  line-height: 2;
+  color: var(--text);
+  margin-block: calc(var(--beat) * 1);
 }
-.doc p {
-  @apply my-[0.9rem];
-}
-/* 箇条書きは記録の行罫で並べる（頁頭語彙と同一） */
+/* 箇条書きは記録の行罫で並べる */
 .doc ul {
-  @apply list-none pl-0 my-[0.9rem] border-b-[1.5px] border-border dark:border-border-dark;
+  margin-block: calc(var(--beat) * 1);
+  border-bottom: 1.5px solid var(--text);
 }
 .doc ul > li {
-  @apply border-t-[1.5px] border-border dark:border-border-dark py-[0.45rem];
+  border-top: 1.5px solid var(--text);
+  padding-block: calc(var(--beat) * 0.5);
+  margin-block: 0;
 }
 .doc ol {
-  @apply list-decimal pl-[1.35rem] my-[0.9rem] space-y-[0.45rem];
+  list-style: decimal;
+  padding-left: calc(var(--beat) * 1.5);
+  margin-block: calc(var(--beat) * 1);
 }
-/* 字飾りは足さない: リンクは昼面では制服色、夜面では花（強調の本領）。opacityのみ */
+.doc ol > li {
+  margin-block: 0;
+}
+.doc ol > li + li {
+  margin-top: calc(var(--beat) * 0.5);
+}
+/* 段落的なol（段の間を2拍空ける） */
+.doc ol.steps {
+  margin-block: calc(var(--beat) * 2);
+}
+/* 施行日など、落ちた注記の小さな字 */
+.doc p.note {
+  margin-top: calc(var(--beat) * 3);
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+/* 字飾りは足さない: リンクは昼面では制服、夜面では花（強調の本領） */
 .doc a {
-  @apply text-uni dark:text-link-dark;
+  color: var(--link);
 }
 .doc a:hover {
   opacity: 0.6;
 }
 .doc code {
-  @apply font-mono text-[0.9em] bg-card dark:bg-card-dark text-uni dark:text-link-dark px-[0.45rem];
+  font-size: 0.9em;
+  background: var(--tint);
+  color: var(--link);
+  padding-inline: calc(var(--beat) * 0.5);
 }
 .doc .intro {
-  @apply text-xl text-primary dark:text-primary-dark;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 }
 .doc strong {
-  @apply font-bold text-primary dark:text-primary-dark;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* 触れたあとの頁送り */
+.pager {
+  max-width: 45rem;
+  margin: calc(var(--beat) * 4) auto 0;
+  display: grid;
+  gap: calc(var(--beat) * 1);
+}
+@media (min-width: 40rem) {
+  .pager {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.pager-link {
+  display: block;
+  padding: calc(var(--beat) * 1.5);
+  border: 1.5px solid var(--text);
+}
+.pager-link:hover {
+  opacity: 0.6;
+}
+.pager-link.is-next {
+  text-align: right;
+}
+.pager-label {
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 900;
+  letter-spacing: 0.3em;
+  color: var(--label);
+}
+.pager-title {
+  font-weight: 700;
+  font-style: italic;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  color: var(--text);
+}
+
+/* ========== ブログ ========== */
+.blog-main {
+  max-width: 45rem;
+  margin-inline: auto;
+  padding: calc(var(--beat) * 4) calc(var(--beat) * 1.5);
+}
+.blog-title {
+  font-weight: 900;
+  font-style: italic;
+  font-size: 3rem;
+  line-height: 1;
+  padding-bottom: calc(var(--beat) * 2);
+  margin-bottom: calc(var(--beat) * 2);
+  border-bottom: 3px solid var(--text);
+}
+.blog-intro {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  color: var(--text);
+  margin-block: 0;
+}
+.blog-list {
+  margin-top: calc(var(--beat) * 3);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--beat) * 1.5);
+}
+.blog-item {
+  border-top: 1.5px solid var(--text);
+  padding-top: calc(var(--beat) * 1.5);
+}
+.blog-item .post-date {
+  display: inline-block;
+}
+.blog-item-title {
+  margin-top: calc(var(--beat) * 0.5);
+  font-weight: 900;
+  font-style: italic;
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+.blog-summary {
+  margin-top: calc(var(--beat) * 0.5);
+  font-size: 1.125rem;
+  line-height: 2;
+  color: var(--note);
+  margin-block: 0;
+}
+
+/* ========== メンバー（第十条 写真は額に据える） ========== */
+.member-card {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--beat) * 1.5);
+  margin-block: calc(var(--beat) * 3);
+}
+@media (min-width: 40rem) {
+  .member-card {
+    flex-direction: row;
+    gap: calc(var(--beat) * 2);
+  }
+}
+/* 実像の額は面の罫3px。色も形もいじらない */
+.member-avatar {
+  width: calc(var(--beat) * 12);
+  height: calc(var(--beat) * 12);
+  flex-shrink: 0;
+  border: 3px solid var(--text);
+  object-fit: cover;
+  background: var(--tint);
+}
+.member-body {
+  flex: 1;
+}
+.member-avatar--blank {
+  display: grid;
+  place-items: center;
+  font-size: 3rem;
+  color: var(--note);
+}
+.doc .member-name {
+  font-weight: 900;
+  font-style: italic;
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  margin-block: 0;
+}
+.doc .member-role {
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  letter-spacing: 0.3em;
+  color: var(--label);
+  margin-block: calc(var(--beat) * 0.5);
+}
+.doc .member-bio {
+  margin-block: calc(var(--beat) * 1);
+  white-space: pre-line;
+}
+.member-links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: calc(var(--beat) * 1.5);
+  row-gap: calc(var(--beat) * 0.5);
+  margin-top: calc(var(--beat) * 1);
+}
+.member-links a {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: var(--link);
+}
+.member-links a:hover {
+  opacity: 0.6;
+}
+
+/* ========== フッター・刻印 ========== */
+.footer {
+  border-top: 3px solid var(--text);
+  background: var(--face);
+}
+.footer-meta {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: calc(var(--beat) * 2.5) calc(var(--beat) * 1.5);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--beat) * 1);
+  justify-content: space-between;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--note);
+}
+@media (min-width: 40rem) {
+  .footer-meta {
+    flex-direction: row;
+  }
+}
+.footer a:hover {
+  opacity: 0.6;
+}
+.imprint {
+  letter-spacing: 0.3em;
+  font-weight: 900;
+  color: var(--label);
 }

@@ -1,5 +1,5 @@
 // オリジナルのロゴ（ゲームパッド + ニューラルノード）
-export function Logo({ className = "w-8 h-8" }: { className?: string }) {
+export function Logo({ className = "" }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 64 64"

@@ -47,11 +47,11 @@ async function TeamMember({ m }: { m: Member }) {
   const login = toLogin(m.github);
   if (!login) {
     return (
-      <div className="flex flex-col sm:flex-row gap-[1.35rem] sm:gap-[1.8rem] my-[2.7rem]">
-        <div aria-hidden="true" className="w-[10.8rem] h-[10.8rem] shrink-0 border-[3px] border-ink dark:border-ground bg-card dark:bg-card-dark grid place-items-center text-5xl text-secondary dark:text-secondary-dark">?</div>
-        <div className="flex-1">
-          <h3 className="mt-0! mb-0! font-black italic text-3xl!">未定</h3>
-          <p className="my-[0.45rem]! font-medium text-base! tracking-[0.3em] text-uni dark:text-primary-dark">{m.role}</p>
+      <div className="member-card">
+        <div aria-hidden="true" className="member-avatar member-avatar--blank">?</div>
+        <div className="member-body">
+          <h3 className="member-name">未定</h3>
+          <p className="member-role">{m.role}</p>
         </div>
       </div>
     );
@@ -61,16 +61,16 @@ async function TeamMember({ m }: { m: Member }) {
   const links = [{ label: "GitHub", href: `https://github.com/${p.login}` }, ...p.links];
 
   return (
-    <div className="flex flex-col sm:flex-row gap-[1.35rem] sm:gap-[1.8rem] my-[2.7rem]">
+    <div className="member-card">
       {/* eslint-disable-next-line @next/next/no-img-element -- 外部のGitHubアイコンなので最適化は不要 */}
-      <img src={p.avatar} alt="" className="w-[10.8rem] h-[10.8rem] shrink-0 border-[3px] border-ink dark:border-ground object-cover bg-card dark:bg-card-dark" />
-      <div className="flex-1">
-        <h3 className="mt-0! mb-0! font-black italic text-3xl!">{p.name}</h3>
-        <p className="my-[0.45rem]! font-medium text-base! tracking-[0.3em] text-uni dark:text-primary-dark">{m.role}</p>
-        {p.bio && <p className="mt-[0.9rem]! mb-[0.9rem]! whitespace-pre-line">{p.bio}</p>}
-        <div className="flex flex-wrap gap-x-[1.35rem] gap-y-[0.45rem] mt-[0.9rem]">
+      <img src={p.avatar} alt="" className="member-avatar" />
+      <div className="member-body">
+        <h3 className="member-name">{p.name}</h3>
+        <p className="member-role">{m.role}</p>
+        {p.bio && <p className="member-bio">{p.bio}</p>}
+        <div className="member-links">
           {links.map((l) => (
-            <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" className="text-base! text-uni dark:text-link-dark">
+            <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer">
               {l.label}
             </a>
           ))}
