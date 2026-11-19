@@ -79,10 +79,10 @@ export default function Home() {
       <section className="px-[1.35rem] pt-[4.5rem] lg:pt-[8.1rem] pb-[5.4rem] text-center">
         <div data-reveal>
           <Logo className="w-[7.2rem] h-[7.2rem] lg:w-[9rem] lg:h-[9rem] mx-auto text-primary dark:text-primary-dark" />
-          <h1 className="mt-[1.8rem] font-black italic text-5xl lg:text-7xl leading-tight">
+          <h1 className="mt-[1.8rem] font-black italic text-6xl lg:text-8xl leading-tight">
             {site.name}
           </h1>
-          <p className="mt-[1.35rem] text-sm tracking-[0.2em] text-uni dark:text-link-dark">
+          <p className="mt-[1.35rem] text-sm tracking-[0.3em] text-uni dark:text-link-dark">
             {site.tagline}
           </p>
           <p className="mt-[1.8rem] text-2xl lg:text-4xl leading-snug">
@@ -90,10 +90,11 @@ export default function Home() {
             <br className="sm:hidden" />
             自分たちの手でつくる。
           </p>
+          {/* 鏡像の真正化: 同型・同罫で、地と字だけを交換する（第五条） */}
           <div className="mt-[2.7rem] flex flex-wrap gap-[0.9rem] justify-center">
             <Link
               href="/learn"
-              className="px-[1.8rem] py-[0.9rem] bg-primary dark:bg-primary-dark text-primary-dark dark:text-primary font-bold italic text-lg hover:opacity-60"
+              className="px-[1.8rem] py-[0.9rem] border-[3px] border-ink dark:border-ground bg-primary dark:bg-primary-dark text-primary-dark dark:text-primary font-bold italic text-lg hover:opacity-60"
             >
               活動を知る
             </Link>
@@ -171,7 +172,7 @@ export default function Home() {
         <div className="mt-[2.7rem] flex justify-center">
           <Link
             href="/learn/join"
-            className="inline-block px-[1.8rem] py-[0.9rem] bg-primary-dark dark:bg-primary text-primary dark:text-primary-dark font-bold italic text-lg hover:opacity-60"
+            className="inline-block px-[1.8rem] py-[0.9rem] border-[3px] border-primary-dark dark:border-primary bg-primary-dark dark:bg-primary text-primary dark:text-primary-dark font-bold italic text-lg hover:opacity-60"
           >
             入部について
           </Link>

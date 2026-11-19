@@ -62,7 +62,7 @@ export function TopNav() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`px-[0.9rem] py-[0.45rem] font-medium ${active ? "font-bold text-bloom dark:text-link-dark" : "hover:opacity-60"}`}
+                  className={`px-[0.9rem] py-[0.45rem] font-medium ${active ? "font-bold text-bloom dark:text-link-dark border-b-[3px] border-bloom" : "hover:opacity-60"}`}
                 >
                   {item.label}
                 </Link>

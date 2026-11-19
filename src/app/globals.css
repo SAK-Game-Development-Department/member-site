@@ -131,17 +131,22 @@ body {
   @apply font-black italic text-3xl mt-[3.6rem] mb-[1.35rem];
 }
 .doc h3 {
-  @apply font-bold text-xl mt-[2.7rem] mb-[0.9rem];
+  @apply font-bold italic text-xl mt-[2.7rem] mb-[0.9rem];
 }
+/* 本文は字の色そのもの。土は注記に降ろす（語彙どおり） */
 .doc p,
 .doc li {
-  @apply text-lg leading-[2] text-secondary dark:text-secondary-dark;
+  @apply text-lg leading-[2] text-primary dark:text-primary-dark;
 }
 .doc p {
   @apply my-[0.9rem];
 }
+/* 箇条書きは記録の行罫で並べる（頁頭語彙と同一） */
 .doc ul {
-  @apply list-disc pl-[1.35rem] my-[0.9rem] space-y-[0.45rem];
+  @apply list-none pl-0 my-[0.9rem] border-b-[1.5px] border-border dark:border-border-dark;
+}
+.doc ul > li {
+  @apply border-t-[1.5px] border-border dark:border-border-dark py-[0.45rem];
 }
 .doc ol {
   @apply list-decimal pl-[1.35rem] my-[0.9rem] space-y-[0.45rem];

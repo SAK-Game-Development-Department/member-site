@@ -8,7 +8,7 @@ export default function Page() {
       <h1 className="font-black italic text-5xl pb-[1.8rem] mb-[1.8rem] border-b-[3px] border-ink dark:border-ground">
         ブログ
       </h1>
-      <p className="text-xl text-secondary dark:text-secondary-dark">
+      <p className="text-xl text-primary dark:text-primary-dark">
         サークルの活動報告やお知らせ。
       </p>
       <div className="mt-[2.7rem] space-y-[1.35rem]">
