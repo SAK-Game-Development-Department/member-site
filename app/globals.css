@@ -17,6 +17,11 @@
   第九条(前傾) 進む文字だけ前に傾ける（italic）。ラベル・記録・注記は直立
   第十条(写真) 写真は色の経済の外の実像。額は面の罫。色も形もいじらない
 
+  v2の精錬:
+  - 柱(sticky masthead)を常設。章anchorの着地に7拍のscroll-margin
+  - 語彙どおり選択色は花。focusは面3pxの罫で示す（影・角丸に頼らない）
+  - 章の面と墨の面、それぞれの字の色で輪郭の大書(outline-ink / outline-ground)
+
   探索表（不採用の記録）:
   元パレット --cream --peach --orange --brown --muted --line は不採用。
   理由は第一条。色をよそされないために、楽曲の外の色は全面に廃棄した。
@@ -44,10 +49,33 @@
   color: transparent;
 }
 
+/* 第四条(墨の面用): 地と字が逆の輪郭 */
+.outline-ground {
+  -webkit-text-stroke: 2px var(--color-ground);
+  color: transparent;
+}
+
 /* 第三条: 章の面罫は頁の端まで走る（この要素自体は左右の内側を持たない） */
 .face-rule {
   margin-left: 0;
   margin-right: 0;
+}
+
+/* 語彙: 選択色は花の一色 */
+::selection {
+  background: var(--color-bloom);
+  color: var(--color-ground);
+}
+
+/* キーボードの焦点は面の罫で示す（影・角丸は使わない。第七条） */
+:focus-visible {
+  outline: 3px solid var(--color-bloom);
+  outline-offset: 3px;
+}
+
+/* 柱がstickyのぶん、章anchorの着地に拍を足す */
+section[id] {
+  scroll-margin-top: 6.3rem; /* 7拍 */
 }
 
 @layer base {

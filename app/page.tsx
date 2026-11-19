@@ -65,18 +65,21 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 塗りの面に対する輪郭の面（鏡）。記号・オーブ・影は剥がした（第七条） */}
+          {/* 鏡像の右（第五条）。左の塗りの信条に対し、名前を輪郭の大書で受ける。
+              塗り⇄輪郭・同型の対。記号・オーブ・影は剥がした（第七条） */}
           <div
             aria-hidden="true"
-            className="absolute top-1/2 right-[5.4rem] hidden -translate-y-1/2 text-right min-[851px]:block"
+            className="absolute top-1/2 right-[5.4rem] hidden -translate-y-1/2 text-right min-[1280px]:block"
           >
-            <div className="text-[clamp(4.5rem,9vw,9rem)] leading-[0.95] font-black italic tracking-[-0.05em] outline-ink">
-              AI
-              <br />×<br />
-              GAME
+            <div className="text-[clamp(2.7rem,3.6vw,4.5rem)] leading-[1.05] font-black italic tracking-[-0.03em] outline-ink">
+              AI &amp; GAME
+              <br />
+              DEVELOPMENT
+              <br />
+              CLUB
             </div>
             <p className="mt-[1.8rem] text-[0.65rem] font-bold tracking-[0.35em] text-uni">
-              MAKE / PLAY / 001
+              OFFICIAL LANDING PAGE
             </p>
           </div>
 
@@ -251,15 +254,23 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ---------- 04 JOIN。表紙の鏡像として、地と字を交換した総面 ---------- */}
-        <section
-          id="join"
-          className="bg-ink px-[5.4rem] pb-[7.2rem] pt-[3.6rem] text-ground max-[850px]:px-[3.6rem] max-[640px]:px-[2.25rem] max-[640px]:pb-[5.4rem]"
-        >
-          {/* 第四章の面罫。字の色（薄桃）に従う。内側余白を打ち消して頁の端まで */}
-          <div className="face-rule border-t-[3px] border-ground max-[850px]:-mx-[3.6rem] max-[640px]:-mx-[2.25rem] mx-[-5.4rem]"></div>
+        {/* ---------- 04 JOIN。表紙の鏡像として、地と字を交換した総面。
+            v2: 01〜03と同型の章構造（ラベル → 面罫 → 本文）に揃えた ---------- */}
+        <section id="join" data-reveal className={`${revealClass} bg-ink text-ground`}>
+          <div className={`${sectionPadClass} ${sectionTopClass}`}>
+            <p className="flex items-baseline gap-[0.9rem] text-[0.7rem] font-bold tracking-[0.35em]">
+              <span className="outline-ground font-black italic text-[3.6rem] leading-none">
+                04
+              </span>{" "}
+              JOIN US
+            </p>
+          </div>
+          {/* 章の面罫。字の色（薄桃）に従う */}
+          <div className="face-rule border-t-[3px] border-ground"></div>
 
-          <div data-reveal className={`${revealClass} pt-[7.2rem] text-center max-[640px]:pt-[5.4rem]`}>
+          <div
+            className={`${sectionPadClass} pt-[4.5rem] pb-[7.2rem] text-center max-[640px]:pt-[2.7rem] max-[640px]:pb-[5.4rem]`}
+          >
             <p className="text-[0.7rem] font-bold tracking-[0.35em]">
               YOUR NEXT IDEA STARTS HERE
             </p>
@@ -290,12 +301,9 @@ export default function Home() {
       {/* ---------- 奥付（Footer）。写真=ロゴは面罫の額（第十条） ---------- */}
       <footer className="border-t-[1px] border-ground bg-ink px-[5.4rem] pb-[2.7rem] pt-[3.6rem] text-ground max-[850px]:px-[3.6rem] max-[640px]:px-[2.25rem] max-[640px]:text-center">
         <div className="flex flex-wrap items-center justify-between gap-[1.8rem] max-[640px]:justify-center max-[640px]:gap-[2.7rem]">
-          <a
-            href="#home"
-            className="block w-[12.6rem] border-[3px] border-ground max-[640px]:w-[10.8rem]"
-          >
+          <a href="#home" className="shrink-0">
             <img
-              className="block w-full"
+              className="block max-h-[3.6rem] w-auto border-[3px] border-ground max-[640px]:max-h-[2.7rem]"
               src="/assets/logo.jpg"
               alt="AI & Game Development Club"
             />
@@ -310,6 +318,10 @@ export default function Home() {
         {/* 色を抜いた一行（第六条・褪色） */}
         <p className="mt-[2.7rem] text-[0.65rem] tracking-[0.25em] opacity-[0.5] max-[640px]:text-[0.6rem]">
           © <CurrentYear /> AI &amp; GAME DEVELOPMENT CLUB. MADE WITH CURIOSITY.
+        </p>
+        {/* 奥付の刻印（直立）。この頁を組んだ言語の拍を明かす */}
+        <p className="mt-[0.45rem] text-[0.6rem] tracking-[0.25em] opacity-[0.5]">
+          WILDFLOWER NOTATION TRIAL — 165 BPM / 1 BEAT 0.36S / BEAT 0.9REM
         </p>
       </footer>
 

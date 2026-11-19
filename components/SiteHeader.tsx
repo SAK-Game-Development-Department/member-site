@@ -29,16 +29,12 @@ export default function SiteHeader() {
         IDEAS INTO REALITY.
       </div>
 
-      {/* 柱（masthead）。行罫1.5pxで閉じる */}
-      <header className="relative flex items-center justify-between gap-[1.8rem] border-b-[1.5px] border-ink bg-ground px-[5.4rem] py-[0.9rem] max-[850px]:px-[3.6rem] max-[640px]:px-[2.25rem]">
+      {/* 柱（masthead）。行罫1.5pxで閉じる。章anchorナビのためsticky（実装規約: 柱+章） */}
+      <header className="sticky top-0 z-[5] flex items-center justify-between gap-[1.8rem] border-b-[1.5px] border-ink bg-ground px-[5.4rem] py-[0.9rem] max-[850px]:px-[3.6rem] max-[640px]:px-[2.25rem]">
         {/* ロゴは実像（第十条）。面罫3pxの額に入れる。色も形もいじらない */}
-        <a
-          className="block w-[14.4rem] border-[3px] border-ink max-[850px]:w-[11.25rem] max-[640px]:w-[10.8rem]"
-          href="#home"
-          aria-label="ホーム"
-        >
+        <a className="shrink-0" href="#home" aria-label="ホーム">
           <img
-            className="block w-full"
+            className="block max-h-[3.6rem] w-auto border-[3px] border-ink max-[640px]:max-h-[2.7rem]"
             src="/assets/logo.jpg"
             alt="AI & Game Development Club ロゴ"
           />
