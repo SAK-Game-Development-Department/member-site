@@ -1,7 +1,8 @@
 /*
   野花の記法 平文CSSによる全面構築し直し（2026-11-19）
   読みの改訂: 前文を置き、第九条（前傾）を廃して「読み」に改める（2026-11-19）
-
+  純化: コントラストは全か無か。混色（rgba）の中間色は全廃し、注記は字の色そのものに
+        する。被せの幕（--tint）は撤去。hoverは中間褪せでなく語彙色（--link）へ動く（2026-11-19）
   「Wildest Flower」MV分析由来のUI言語。このファイルはTailwindのビルドに頼らず、
   記法の条文をそのままCSSとして書き下した。@theme も @apply も使わない。
   ユーティリティクラス（px-[1.35rem] 等）は廃止し、 TSX は意味クラス（cover / chapter / doc…）
@@ -11,7 +12,8 @@
   前文(読み)  読みやすさは、他のいずれの条にも優る。どの面でも、どの字体環境でも、
               まず読めなくてはならない。表現の要件（字重・字間・斜体）がすべて
               欠けてもなお、識別が成立する大きさと色で書く。
-  第一条(色)  色は五色だけ。CSS変数を唯一の色源に。
+  第一条(色)  色は四色だけ（地・墨・花・制服。土は廃色）。CSS変数を唯一の色源に。
+              字・語彙色・面の三段の外に、コントラストを作らない（全か無か）。
   第二条(拍)  余白は拍できざむ。このCSSでは計算式 calc(var(--beat) * N) で書き、
               整数倍・半分倍だけを構造的に強制する。数値の直書きはしない。
   第三条(罫)  罫は三段。面3px / 行1.5px / 糸1px。罫は字の色に従う（すべて var(--text)）。
@@ -42,7 +44,8 @@
   字体環境への依存が読みを壊したため、読みの改訂で廃した。小型極太・直立は据え置く。
   字間は和文0.12em・欧文0.3em。字重900は装飾であり、不可欠な階梯には載せない。
   制服の字は昼面の語（夜面では 3.54:1、大書の位階のみ）。
-  土は昼面専用の注記色（夜面では 2.60:1）。夜面の注記は薄桃を沈ませて使う。
+  注記の色語彙は廃止した（中途半端な中間コントラストの純化）。注記は字の色そのもの。
+  大きさ・字重・字間だけで注記を語る。hoverの語りは語彙色（--link）へ動く。
 
   夜の追加禁止（第七条の夜まわり）:
   発光（box-shadowの光）・高度（明るい面と影の階層）・被せ（半透明の幕）も貼らない。
@@ -51,6 +54,9 @@
   react.dev風パレット（#087ea4 などリンク青・#e6f7ff など）は不採用。
   青は制服 #4A6FA5 に、選択色は花 #F2508F に一本化した。
   夜焼け（制服を color-mix で薄桃へ再照明する案）は不採用。hex定点を壊し六色目を作る。
+  注記の薄め（rgba 0.8の薄桃）と被せの幕（rgba 0.07の洗い）は廃止。
+  字と面の間に留まり続ける中間コントラストは「褪せ」ではなく「薄め」であり、読みを削った。
+  土 #6B5546 は廃色（注記の役を字色へ一本化したため。昼面で 6.1:1 の中間値だった）。
   --beat --sec は色ではなく拍と秒の単位（第二条・第八条）。
 */
 
@@ -60,7 +66,7 @@
   --ink: #161616; /* 墨: MVロゴの黒 */
   --bloom: #f2508f; /* 花: 強調・選択色・罫 */
   --uni: #4a6fa5; /* 制服: 昼面のラベル・期日・本文リンク */
-  --track: #6b5546; /* 土: 昼面専用の注記色 */
+  /* 土 #6b5546 は廃色（注記語彙の廃止により役割を失う。探索表に記録） */
 
   /* 第二条・第八条: 拍と秒 */
   --beat: 0.9rem;
@@ -69,11 +75,9 @@
   /* 面（夜基調。開きの面 = 夜面） */
   --face: var(--ink);
   --text: var(--ground);
-  /* 夜面の同線: リンクもラベルも花。注記は薄桃を沈ませる（読みの改訂: 色は字体環境に依存しない） */
+  /* 夜面の同線: リンク・ラベルは花。注記は字の色（全か無か） */
   --link: var(--bloom);
   --label: var(--bloom);
-  --note: rgba(255, 233, 240, 0.8);
-  --tint: rgba(255, 233, 240, 0.07);
 }
 
 /* 昼面（交換の面） */
@@ -82,8 +86,6 @@
   --text: var(--ink);
   --link: var(--uni);
   --label: var(--uni);
-  --note: var(--track);
-  --tint: rgba(22, 22, 22, 0.04);
 }
 
 /* ========== 基礎（Tailwind廃止に伴う下ごしらえ） ========== */
@@ -224,10 +226,9 @@ body {
   margin-left: calc(var(--beat) * -0.5);
 }
 .menu-btn:hover,
-.brand:hover,
 .theme-btn:hover,
 .github-link:hover {
-  opacity: 0.6; /* 第六条: 色を抜くだけで消しはしない */
+  color: var(--link); /* hoverは語彙色へ(中間褪せは廃止) */
 }
 .menu-btn svg,
 .theme-btn svg {
@@ -310,7 +311,7 @@ body {
   font-weight: 500;
 }
 .nav-item:hover {
-  opacity: 0.6;
+  color: var(--link); /* hoverは語彙色へ(中間褪せは廃止) */
 }
 .nav-item.is-active {
   font-weight: 700;
@@ -355,7 +356,7 @@ body {
   border-left: 3px solid transparent;
 }
 .menu-item:hover {
-  background: var(--tint);
+  color: var(--link); /* hoverは語彙色へ(被せの幕は廃止) */
 }
 .menu-item--blog {
   font-weight: 700;
@@ -445,7 +446,7 @@ body {
   line-height: calc(var(--beat) * 2);
 }
 .cta:hover {
-  opacity: 0.6;
+  color: var(--link); /* hoverは語彙色へ(中間褪せは廃止) */
 }
 .cta--fill {
   background: var(--text);
@@ -533,7 +534,7 @@ body {
   text-align: center;
   font-size: 1.25rem;
   line-height: calc(var(--beat) * 2);
-  color: var(--note);
+  color: var(--text); /* 注記は字の色(全か無か) */
 }
 .chapter-grid {
   display: grid;
@@ -586,7 +587,7 @@ body {
   padding: calc(var(--beat) * 1.5);
 }
 .post-card:hover {
-  opacity: 0.6;
+  color: var(--link); /* hoverは語彙色へ(中間褪せは廃止) */
 }
 .post-date {
   font-size: 0.875rem;
@@ -604,7 +605,7 @@ body {
 }
 .post-summary {
   margin-top: calc(var(--beat) * 0.5);
-  color: var(--note);
+  color: var(--text); /* 注記は字の色(全か無か) */
 }
 
 /* ========== 文書頁（docs: learn / community） ========== */
@@ -646,7 +647,7 @@ body {
   border-left: 3px solid transparent;
 }
 .docs-item:hover {
-  opacity: 0.6;
+  color: var(--link); /* hoverは語彙色へ(中間褪せは廃止) */
 }
 .docs-item.is-active {
   border-left-color: var(--bloom);
@@ -699,7 +700,7 @@ body {
   margin-top: calc(var(--beat) * 3);
   margin-bottom: calc(var(--beat) * 1);
 }
-/* 本文は字の色そのもの。注記は沈んだ色（--note）に降ろす */
+/* 本文も注記も字の色は同じ。注記は大きさと字間だけで下げる（全か無か） */
 .doc p,
 .doc li {
   font-size: 1.125rem;
@@ -732,7 +733,7 @@ body {
 .doc ol.steps {
   margin-block: calc(var(--beat) * 2);
 }
-/* 施行日など、落ちた注記の小さな字 */
+/* 施行日など、注記の小さな字 */
 .doc p.note {
   margin-top: calc(var(--beat) * 3);
   font-size: 1rem;
@@ -743,11 +744,10 @@ body {
   color: var(--link);
 }
 .doc a:hover {
-  opacity: 0.6;
+  color: var(--link); /* hoverは語彙色へ(中間褪せは廃止) */
 }
 .doc code {
   font-size: 0.9em;
-  background: var(--tint);
   color: var(--link);
   padding-inline: calc(var(--beat) * 0.5);
 }
@@ -778,7 +778,7 @@ body {
   border: 1.5px solid var(--text);
 }
 .pager-link:hover {
-  opacity: 0.6;
+  color: var(--link); /* hoverは語彙色へ(中間褪せは廃止) */
 }
 .pager-link.is-next {
   text-align: right;
@@ -844,7 +844,7 @@ body {
   margin-top: calc(var(--beat) * 0.5);
   font-size: 1.125rem;
   line-height: 2;
-  color: var(--note);
+  color: var(--text); /* 注記は字の色(全か無か) */
   margin-block: 0;
 }
 
@@ -868,7 +868,6 @@ body {
   flex-shrink: 0;
   border: 3px solid var(--text);
   object-fit: cover;
-  background: var(--tint);
 }
 .member-body {
   flex: 1;
@@ -890,7 +889,7 @@ body {
   display: grid;
   place-items: center;
   font-size: 3rem;
-  color: var(--note);
+  color: var(--text); /* 注記は字の色(全か無か) */
 }
 .doc .member-name {
   font-weight: 900;
@@ -924,7 +923,7 @@ body {
   color: var(--link);
 }
 .member-links a:hover {
-  opacity: 0.6;
+  color: var(--link); /* hoverは語彙色へ(中間褪せは廃止) */
 }
 
 /* ========== フッター・刻印 ========== */
@@ -942,7 +941,7 @@ body {
   justify-content: space-between;
   font-size: 0.875rem;
   line-height: calc(var(--beat) * 1.5);
-  color: var(--note);
+  color: var(--text); /* 注記は字の色(全か無か) */
 }
 @media (min-width: 40rem) {
   .footer-meta {
@@ -950,7 +949,7 @@ body {
   }
 }
 .footer a:hover {
-  opacity: 0.6;
+  color: var(--link); /* hoverは語彙色へ(中間褪せは廃止) */
 }
 .imprint {
   letter-spacing: 0.3em;
