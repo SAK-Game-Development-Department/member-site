@@ -22,7 +22,7 @@ export function DocsLayout({
       <aside className="hidden lg:block w-72 shrink-0 sticky top-[4.5rem] h-[calc(100vh-4.5rem)] overflow-y-auto border-r border-border dark:border-border-dark px-[0.9rem] py-[1.8rem]">
         {sidebar.map((s) => (
           <div key={s.title} className="mb-[1.35rem]">
-            <p className="px-[0.9rem] mb-[0.45rem] text-sm font-bold tracking-[0.18em] text-secondary dark:text-secondary-dark">
+            <p className="px-[0.9rem] mb-[0.45rem] text-sm font-bold tracking-[0.18em] text-uni dark:text-link-dark">
               {s.title}
             </p>
             <ul>
