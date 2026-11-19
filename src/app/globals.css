@@ -1,0 +1,182 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+  野花の記法 — official-site 統合（十箇条の条文）
+  「Wildest Flower」MV分析由来のUI言語。member-site 試験適用 v2 を本サイトの構造に統合した。
+
+  第一条(色)  色は五色だけ。CSS変数を唯一の色源に。
+  第二条(拍)  余白は拍できざむ。--beat(0.9rem) の整数倍・半分倍のみ
+  第三条(罫)  罫は三段。面3px / 行1.5px / 糸1px。罫は字の色に従う
+  第四条(数)  数は輪郭の大書にする（塗らない）。いちばんの塗りは名前だけ
+  第五条(鏡)  鏡像は額で対として立つ。同型・同罫で、地と字だけを交換する
+  第六条(褪)  確定していない記録は色を抜く（opacity .5）。消しはしない
+  第七条(現物) 影・角丸・グラデ・テクスチャはメッキ。貼らない
+  第八条(拍動) 1拍 = 60÷165 = 0.36s。動きは opacity と translate だけ、一度見えたら隠さない
+  第九条(前傾) 進む文字だけ前に傾ける（italic）。ラベル・記録・注記は直立
+  第十条(写真) 写真は色の経済の外の実像。額は面の罫。色も形もいじらない
+
+  面について（夜基調）:
+  頁は夜面を開きの面とする。昼面は切替・保存・環境設定で開く「交換の面」。
+  夜面 = 墨の面　（地 #161616 / 字 #FFE9F0）＝ 開きの面
+  昼面 = 薄桃の面（地 #FFE9F0 / 字 #161616）＝ 交換で開く面
+  字と面の対比は両面で対称（15.65:1）。面の交換は同型・同罫・対等（第五条）。
+  旧トークン名（wash/card/link/border…）は編集範囲を最小化するためそのまま残し、
+  すべて五色に再結線した。色の追加はしていない（第一条の記録）。
+
+  語彙の面別配分（対比実測に基づく）:
+  強調は花の一色のみ。花は夜面で 5.45:1 と本領を鳴らし、昼面では 2.87:1 と
+  大型基準（3:1）に届かない。昼面の花は面罫と輪郭で支える。
+  ラベル・期日・役職は夜面では字体で語う（小型極太・字間0.3em・直立の薄桃）。
+  夜面で花をラベルに使わない（花の希釈を許さない）。
+  制服の字は昼面の語（夜面では 3.54:1、大書の位階のみ）。
+  土は昼面専用の注記色（夜面では 2.60:1）。夜面の注記は薄桃を沈ませて使う。
+
+  夜の追加禁止（第七条の夜まわり）:
+  発光（box-shadowの光）・高度（明るい面と影の階層）・被せ（半透明の幕）も貼らない。
+
+  探索表（不採用の記録）:
+  react.dev風パレット（#087ea4 などリンク青・#e6f7ff など）は不採用。
+  青は制服 #4A6FA5 に、選択色は花 #F2508F に一本化した。
+  夜焼け（制服を color-mix で薄桃へ再照明する案）は不採用。hex定点を壊し六色目を作る。
+  CSS変数 --beat --sec は色ではなく拍と秒の単位（第二条・第八条）。
+*/
+
+@theme {
+  /* 第一条: 五色 */
+  --color-ground: #ffe9f0; /* 地: MV平坦カットの薄桃背景 */
+  --color-ink: #161616; /* 墨: MVロゴの黒 */
+  --color-bloom: #f2508f; /* 花: 強調・選択色・左罫 */
+  --color-uni: #4a6fa5; /* 制服: 昼面のラベル・期日・本文リンク。夜面の字としては使わない */
+  --color-track: #6b5546; /* 土: 注記の落ちた色 */
+
+  /* 旧トークンの再結線（ライト面=薄桃、ダーク面=墨） */
+  --color-wash: #ffe9f0;
+  --color-wash-dark: #161616;
+  --color-primary: #161616;
+  --color-primary-dark: #ffe9f0;
+  --color-secondary: #6b5546;
+  --color-secondary-dark: rgba(255, 233, 240, 0.8); /* 夜の注記: 薄桃を沈ませる */
+  --color-link: #4a6fa5;
+  --color-link-dark: #f2508f;
+  --color-card: rgba(22, 22, 22, 0.04);
+  --color-card-dark: rgba(255, 233, 240, 0.07);
+  --color-border: #161616;
+  --color-border-dark: #ffe9f0;
+  --color-highlight: rgba(242, 80, 143, 0.15);
+  --color-highlight-dark: rgba(242, 80, 143, 0.2);
+
+  --font-sans: "DM Sans", "Noto Sans JP", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+:root {
+  --beat: 0.9rem; /* 第二条: 1拍 */
+  --sec: 0.36s; /* 第八条: BPM165 → 60÷165 */
+}
+
+/* 第四条: 数は塗らない。輪郭の大書 */
+.outline-ink {
+  -webkit-text-stroke: 2px var(--color-ink);
+  color: transparent;
+}
+.outline-ground {
+  -webkit-text-stroke: 2px var(--color-ground);
+  color: transparent;
+}
+/* 墨の面では輪郭の色を面の字色と交換する（第四条） */
+.dark .outline-ink {
+  -webkit-text-stroke-color: var(--color-ground);
+}
+.dark .outline-ground {
+  -webkit-text-stroke-color: var(--color-ink);
+}
+
+/* 語彙: 選択色は花の一色 */
+::selection {
+  background: var(--color-bloom);
+  color: var(--color-ground);
+}
+
+/* キーボードの焦点は面の罫で示す（影・角丸に頼らない。第七条） */
+:focus-visible {
+  outline: 3px solid var(--color-bloom);
+  outline-offset: 3px;
+}
+
+/* 柱が固定のぶん、anchorの着地に拍を足す */
+html {
+  scroll-padding-top: 6.3rem; /* 7拍 */
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-wash text-primary dark:bg-wash-dark dark:text-primary-dark font-sans antialiased;
+  overflow-x: clip;
+}
+
+/* 第八条: 動きは2拍。opacityとtranslateだけ。一度見えたら隠さない */
+[data-reveal] {
+  transition: opacity 0.72s, transform 0.72s;
+}
+[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(0.9rem);
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ドキュメントページ本文（.doc）。罫と余白は拍で */
+.doc h1 {
+  @apply font-black italic text-4xl lg:text-5xl leading-tight mb-[0.9rem] pb-[1.8rem] border-b-[3px] border-ink dark:border-ground;
+}
+.doc h2 {
+  @apply font-black italic text-3xl mt-[3.6rem] mb-[1.35rem];
+}
+.doc h3 {
+  @apply font-bold italic text-xl mt-[2.7rem] mb-[0.9rem];
+}
+/* 本文は字の色そのもの。土は注記に降ろす（語彙どおり） */
+.doc p,
+.doc li {
+  @apply text-lg leading-[2] text-primary dark:text-primary-dark;
+}
+.doc p {
+  @apply my-[0.9rem];
+}
+/* 箇条書きは記録の行罫で並べる（頁頭語彙と同一） */
+.doc ul {
+  @apply list-none pl-0 my-[0.9rem] border-b-[1.5px] border-border dark:border-border-dark;
+}
+.doc ul > li {
+  @apply border-t-[1.5px] border-border dark:border-border-dark py-[0.45rem];
+}
+.doc ol {
+  @apply list-decimal pl-[1.35rem] my-[0.9rem] space-y-[0.45rem];
+}
+/* 字飾りは足さない: リンクは昼面では制服色、夜面では花（強調の本領）。opacityのみ */
+.doc a {
+  @apply text-uni dark:text-link-dark;
+}
+.doc a:hover {
+  opacity: 0.6;
+}
+.doc code {
+  @apply font-mono text-[0.9em] bg-card dark:bg-card-dark text-uni dark:text-link-dark px-[0.45rem];
+}
+.doc .intro {
+  @apply text-xl text-primary dark:text-primary-dark;
+}
+.doc strong {
+  @apply font-bold text-primary dark:text-primary-dark;
+}
