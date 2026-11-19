@@ -1,16 +1,53 @@
 @import "tailwindcss";
 
-/* デザイントークン（色・フォント）。元の style.css の :root 変数を移植 */
+/*
+  野花の記法 — 試験適用（十箇条の条文）
+  「Wildest Flower」MV分析から引いたCSS言語。原文は canvas「花海咲季 活動記録」に。
+
+  第一条(色)  色は五色だけ。CSS変数を唯一の色源に。楽曲の外から色を足さない
+  第二条(拍)  余白は拍できざむ。--beat(0.9rem) の整数倍・半分倍のみ
+  第三条(罫)  罫は三段。面3px / 行1.5px / 糸1px。中間なし。罫は字の色に従う。
+              章の面罫は頁の端まで走る（本体は overflow-x:clip）
+  第四条(数)  数は輪郭の大書にする（塗らない）。いちばんの塗りは名前＝ヒーローだけ
+  第五条(鏡)  鏡像は額で対として立つ。同型・同罫で、地と字だけを交換する
+  第六条(褪)  確定していない記録は色を抜く（opacity .5）。消しはしない
+  第七条(現物) 影・角丸・グラデ・テクスチャはメッキ。貼らない
+  第八条(拍動) 1拍 = 60÷165 = 0.36s。動きは opacity と translate だけ、
+              速さは拍の整数倍。章は一度見えたら隠さない
+  第九条(前傾) 進む文字だけ前に傾ける（italic）。ラベル・記録・注記は直立
+  第十条(写真) 写真は色の経済の外の実像。額は面の罫。色も形もいじらない
+
+  探索表（不採用の記録）:
+  元パレット --cream --peach --orange --brown --muted --line は不採用。
+  理由は第一条。色をよそされないために、楽曲の外の色は全面に廃棄した。
+  CSS変数 --beat --sec は色ではなく拍と秒の単位（第二条・第八条）。
+*/
+
 @theme {
-  --color-cream: #fff2e4;
-  --color-peach: #f5c7a6;
-  --color-orange: #c66c49;
-  --color-brown: #42251c;
-  --color-ink: #38221b;
-  --color-muted: #8d6858;
-  --color-line: rgba(66, 37, 28, 0.17);
+  --color-ground: #ffe9f0; /* 地: MV平坦カットの薄桃背景。字・罫・額の基本 */
+  --color-ink: #161616; /* 墨: MVロゴの黒 */
+  --color-bloom: #f2508f; /* 花: 強調はこの一色だけ */
+  --color-uni: #4a6fa5; /* 制服: ラベル・期日・キャプション */
+  --color-track: #6b5546; /* 土: 注記の落ちた色 */
 
   --font-sans: "DM Sans", "Noto Sans JP", sans-serif;
+}
+
+:root {
+  --beat: 0.9rem; /* 第二条: 1拍 = 0.9rem */
+  --sec: 0.36s; /* 第八条: BPM165 → 60÷165 = 0.36s */
+}
+
+/* 第四条: 数は塗らない。輪郭の大書 */
+.outline-ink {
+  -webkit-text-stroke: 2px var(--color-ink);
+  color: transparent;
+}
+
+/* 第三条: 章の面罫は頁の端まで走る（この要素自体は左右の内側を持たない） */
+.face-rule {
+  margin-left: 0;
+  margin-right: 0;
 }
 
 @layer base {
@@ -19,6 +56,20 @@
   }
 
   body {
-    @apply bg-cream text-brown font-sans;
+    @apply bg-ground text-ink font-sans;
+    overflow-x: clip; /* 第三条: 端までの罫のため */
+  }
+}
+
+/* 第八条: prefers-reduced-motion では初めから全見え */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
