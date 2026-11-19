@@ -1,5 +1,6 @@
 /*
   野花の記法 平文CSSによる全面構築し直し（2026-11-19）
+  読みの改訂: 前文を置き、第九条（前傾）を廃して「読み」に改める（2026-11-19）
 
   「Wildest Flower」MV分析由来のUI言語。このファイルはTailwindのビルドに頼らず、
   記法の条文をそのままCSSとして書き下した。@theme も @apply も使わない。
@@ -7,6 +8,9 @@
   を参照する。package.json/package-lock.json は変えないので npm ci は従来どおり可能
   （tailwindcss は未使用の devDependency として残る。手元で lock の更新をして外してよい）。
 
+  前文(読み)  読みやすさは、他のいずれの条にも優る。どの面でも、どの字体環境でも、
+              まず読めなくてはならない。表現の要件（字重・字間・斜体）がすべて
+              欠けてもなお、識別が成立する大きさと色で書く。
   第一条(色)  色は五色だけ。CSS変数を唯一の色源に。
   第二条(拍)  余白は拍できざむ。このCSSでは計算式 calc(var(--beat) * N) で書き、
               整数倍・半分倍だけを構造的に強制する。数値の直書きはしない。
@@ -19,7 +23,10 @@
   第七条(現物) 影・角丸・グラデ・テクスチャはメッキ。貼らない。
   第八条(拍動) 1拍 = 60÷165 = 0.36s（--sec）。動きは opacity と translate だけ、
               2拍の整数速度で、一度見えたら隠さない。
-  第九条(前傾) 進む文字だけ前に傾ける（italic）。ラベル・期日・記録・注記は直立。
+  第九条(読み) 旧・前傾を廃した。和文の斜体はブラウザの合成＝字体の改竄で、読みを害す
+              （第七条の精神に照らして偽物）。進む文字は大きさで際立たせる。
+              ラベルは色で語る（夜面=花、昼面=制服。字体環境を失っても識別が残る）。
+              字間は和文 0.12em 上限、欧文は 0.3em まで。行間も拍の整数倍・半分倍に載せる。
   第十条(写真) 写真は色の経済の外の実像。額は面の罫。色も形もいじらない。
 
   面について（夜基調）:
@@ -31,8 +38,9 @@
   語彙の面別配分（対比実測に基づく）:
   強調は花の一色のみ。花は夜面で 5.45:1 と本領を鳴らし、昼面では 2.87:1 と
   大型基準（3:1）に届かない。昼面の花は面罫と輪郭で支える。
-  ラベル・期日・役職は夜面では字体で語う（小型極太・字間0.3em・直立の薄桃）。
-  夜面で花をラベルに使わない（花の希釈を許さない）。
+  ラベル・期日・役職は夜面では花が語る（5.45:1）。かつての「字体で語る」は
+  字体環境への依存が読みを壊したため、読みの改訂で廃した。小型極太・直立は据え置く。
+  字間は和文0.12em・欧文0.3em。字重900は装飾であり、不可欠な階梯には載せない。
   制服の字は昼面の語（夜面では 3.54:1、大書の位階のみ）。
   土は昼面専用の注記色（夜面では 2.60:1）。夜面の注記は薄桃を沈ませて使う。
 
@@ -61,9 +69,9 @@
   /* 面（夜基調。開きの面 = 夜面） */
   --face: var(--ink);
   --text: var(--ground);
-  /* 夜面の同線: リンクは花、ラベルは字体で語り薄桃に、注記は薄桃を沈ませる */
+  /* 夜面の同線: リンクもラベルも花。注記は薄桃を沈ませる（読みの改訂: 色は字体環境に依存しない） */
   --link: var(--bloom);
-  --label: var(--ground);
+  --label: var(--bloom);
   --note: rgba(255, 233, 240, 0.8);
   --tint: rgba(255, 233, 240, 0.07);
 }
@@ -236,9 +244,9 @@ body {
   align-items: center;
   gap: calc(var(--beat) * 0.5);
   font-weight: 900;
-  font-style: italic; /* 第九条: 名前は前傾 */
+  font-style: normal; /* 前傾は読みの改訂で廃止 */
   font-size: 1.125rem;
-  line-height: 1.75rem;
+  line-height: calc(var(--beat) * 2);
   white-space: nowrap;
 }
 .brand:hover {
@@ -274,9 +282,9 @@ body {
 }
 .tagline {
   font-size: 0.875rem;
-  line-height: 1.25rem;
+  line-height: calc(var(--beat) * 1.5);
   font-weight: 900;
-  letter-spacing: 0.3em; /* ラベルの字体で語る */
+  letter-spacing: 0.12em; /* 和文ラベルの字間(読みの改訂)。ラベルは色で語る */
   color: var(--label);
 }
 .nav-spacer {
@@ -315,7 +323,7 @@ body {
 .github-link {
   padding: calc(var(--beat) * 0.5);
   font-size: 0.875rem;
-  line-height: 1.25rem;
+  line-height: calc(var(--beat) * 1.5);
   font-weight: 900;
   letter-spacing: 0.3em;
 }
@@ -336,9 +344,9 @@ body {
 .menu-label {
   padding: 0 calc(var(--beat) * 1) calc(var(--beat) * 0.5);
   font-size: 0.875rem;
-  line-height: 1.25rem;
+  line-height: calc(var(--beat) * 1.5);
   font-weight: 900;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.12em; /* 和文ラベルの字間(読みの改訂) */
   color: var(--label);
 }
 .menu-item {
@@ -384,7 +392,7 @@ body {
 .site-title {
   margin-top: calc(var(--beat) * 2);
   font-weight: 900;
-  font-style: italic;
+  font-style: normal; /* 前傾は読みの改訂で廃止 */
   font-size: 3rem;
   line-height: 1.25;
 }
@@ -396,9 +404,9 @@ body {
 .cover-tagline {
   margin-top: calc(var(--beat) * 1.5);
   font-size: 0.875rem;
-  line-height: 1.25rem;
+  line-height: calc(var(--beat) * 1.5);
   font-weight: 900;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.12em; /* 和文ラベルの字間(読みの改訂) */
   color: var(--label);
 }
 .cover-lead {
@@ -432,9 +440,9 @@ body {
   padding: calc(var(--beat) * 1) calc(var(--beat) * 2);
   border: 3px solid var(--text);
   font-weight: 700;
-  font-style: italic;
+  font-style: normal; /* 前傾は読みの改訂で廃止 */
   font-size: 1.125rem;
-  line-height: 1.75rem;
+  line-height: calc(var(--beat) * 2);
 }
 .cta:hover {
   opacity: 0.6;
@@ -482,7 +490,7 @@ body {
   margin-inline: auto;
   text-align: center;
   font-size: 1.25rem;
-  line-height: 1.75rem;
+  line-height: calc(var(--beat) * 2);
   margin-bottom: 0;
 }
 .chapter-cta {
@@ -510,7 +518,7 @@ body {
 }
 .chapter-title {
   font-weight: 900;
-  font-style: italic;
+  font-style: normal; /* 前傾は読みの改訂で廃止 */
   font-size: 1.875rem;
   line-height: 1.25;
 }
@@ -524,7 +532,7 @@ body {
   margin: 0 auto calc(var(--beat) * 4);
   text-align: center;
   font-size: 1.25rem;
-  line-height: 1.75rem;
+  line-height: calc(var(--beat) * 2);
   color: var(--note);
 }
 .chapter-grid {
@@ -541,7 +549,7 @@ body {
 /* 記録の行罫（頁頭語彙と同一） */
 .record-list {
   font-size: 1.125rem;
-  line-height: 1.75rem;
+  line-height: calc(var(--beat) * 2);
   border-bottom: 1.5px solid var(--text); /* 行罫 */
 }
 .record-list li {
@@ -554,7 +562,7 @@ body {
   padding: calc(var(--beat) * 1.5);
   overflow-x: auto;
   font-size: 0.875rem;
-  line-height: 1.7;
+  line-height: 1.8; /* 本文の行間(読みの改訂) */
 }
 
 /* ========== 触れた記録（告知の額） ========== */
@@ -582,7 +590,7 @@ body {
 }
 .post-date {
   font-size: 0.875rem;
-  line-height: 1.25rem;
+  line-height: calc(var(--beat) * 1.5);
   font-weight: 900;
   letter-spacing: 0.3em;
   color: var(--label);
@@ -590,9 +598,9 @@ body {
 .post-title {
   margin-top: calc(var(--beat) * 0.5);
   font-size: 1.25rem;
-  line-height: 1.75rem;
+  line-height: calc(var(--beat) * 2);
   font-weight: 700;
-  font-style: italic;
+  font-style: normal; /* 前傾は読みの改訂で廃止 */
 }
 .post-summary {
   margin-top: calc(var(--beat) * 0.5);
@@ -627,9 +635,9 @@ body {
 .docs-label {
   padding: 0 calc(var(--beat) * 1) calc(var(--beat) * 0.5);
   font-size: 0.875rem;
-  line-height: 1.25rem;
+  line-height: calc(var(--beat) * 1.5);
   font-weight: 900;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.12em; /* 和文ラベルの字間(読みの改訂) */
   color: var(--label);
 }
 .docs-item {
@@ -663,7 +671,7 @@ body {
 }
 .doc h1 {
   font-weight: 900;
-  font-style: italic;
+  font-style: normal; /* 前傾は読みの改訂で廃止 */
   font-size: 2.25rem;
   line-height: 1.25;
   margin-bottom: calc(var(--beat) * 1);
@@ -677,17 +685,17 @@ body {
 }
 .doc h2 {
   font-weight: 900;
-  font-style: italic;
+  font-style: normal; /* 前傾は読みの改訂で廃止 */
   font-size: 1.875rem;
-  line-height: 2.25rem;
+  line-height: calc(var(--beat) * 2.5);
   margin-top: calc(var(--beat) * 4);
   margin-bottom: calc(var(--beat) * 1.5);
 }
 .doc h3 {
   font-weight: 700;
-  font-style: italic;
+  font-style: normal; /* 前傾は読みの改訂で廃止 */
   font-size: 1.25rem;
-  line-height: 1.75rem;
+  line-height: calc(var(--beat) * 2);
   margin-top: calc(var(--beat) * 3);
   margin-bottom: calc(var(--beat) * 1);
 }
@@ -728,7 +736,7 @@ body {
 .doc p.note {
   margin-top: calc(var(--beat) * 3);
   font-size: 1rem;
-  line-height: 1.5rem;
+  line-height: calc(var(--beat) * 1.5);
 }
 /* 字飾りは足さない: リンクは昼面では制服、夜面では花（強調の本領） */
 .doc a {
@@ -745,7 +753,7 @@ body {
 }
 .doc .intro {
   font-size: 1.25rem;
-  line-height: 1.75rem;
+  line-height: calc(var(--beat) * 2);
 }
 .doc strong {
   font-weight: 700;
@@ -778,16 +786,16 @@ body {
 .pager-label {
   display: block;
   font-size: 0.875rem;
-  line-height: 1.25rem;
+  line-height: calc(var(--beat) * 1.5);
   font-weight: 900;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.12em; /* 和文ラベルの字間(読みの改訂) */
   color: var(--label);
 }
 .pager-title {
   font-weight: 700;
-  font-style: italic;
+  font-style: normal; /* 前傾は読みの改訂で廃止 */
   font-size: 1.125rem;
-  line-height: 1.75rem;
+  line-height: calc(var(--beat) * 2);
   color: var(--text);
 }
 
@@ -799,7 +807,7 @@ body {
 }
 .blog-title {
   font-weight: 900;
-  font-style: italic;
+  font-style: normal; /* 前傾は読みの改訂で廃止 */
   font-size: 3rem;
   line-height: 1;
   padding-bottom: calc(var(--beat) * 2);
@@ -808,7 +816,7 @@ body {
 }
 .blog-intro {
   font-size: 1.25rem;
-  line-height: 1.75rem;
+  line-height: calc(var(--beat) * 2);
   color: var(--text);
   margin-block: 0;
 }
@@ -828,9 +836,9 @@ body {
 .blog-item-title {
   margin-top: calc(var(--beat) * 0.5);
   font-weight: 900;
-  font-style: italic;
+  font-style: normal; /* 前傾は読みの改訂で廃止 */
   font-size: 1.5rem;
-  line-height: 2rem;
+  line-height: calc(var(--beat) * 2.5);
 }
 .blog-summary {
   margin-top: calc(var(--beat) * 0.5);
@@ -865,6 +873,19 @@ body {
 .member-body {
   flex: 1;
 }
+/* 読みの改訂: カードの名前は大きさと字重で際立たせる(前傾に代わる)。役職は色で語る */
+.member-name {
+  font-weight: 900;
+  font-size: 1.5rem;
+  line-height: calc(var(--beat) * 2);
+  margin-block: 0;
+}
+.member-role {
+  font-weight: 500;
+  letter-spacing: 0.12em; /* 和文ラベルの字間(読みの改訂) */
+  color: var(--label);
+  margin-block: calc(var(--beat) * 0.5);
+}
 .member-avatar--blank {
   display: grid;
   place-items: center;
@@ -873,16 +894,16 @@ body {
 }
 .doc .member-name {
   font-weight: 900;
-  font-style: italic;
+  font-style: normal; /* 前傾は読みの改訂で廃止 */
   font-size: 1.875rem;
-  line-height: 2.25rem;
+  line-height: calc(var(--beat) * 2.5);
   margin-block: 0;
 }
 .doc .member-role {
   font-weight: 500;
   font-size: 1rem;
-  line-height: 1.5rem;
-  letter-spacing: 0.3em;
+  line-height: calc(var(--beat) * 1.5);
+  letter-spacing: 0.12em; /* 和文ラベルの字間(読みの改訂) */
   color: var(--label);
   margin-block: calc(var(--beat) * 0.5);
 }
@@ -899,7 +920,7 @@ body {
 }
 .member-links a {
   font-size: 1rem;
-  line-height: 1.5rem;
+  line-height: calc(var(--beat) * 1.5);
   color: var(--link);
 }
 .member-links a:hover {
@@ -920,7 +941,7 @@ body {
   gap: calc(var(--beat) * 1);
   justify-content: space-between;
   font-size: 0.875rem;
-  line-height: 1.25rem;
+  line-height: calc(var(--beat) * 1.5);
   color: var(--note);
 }
 @media (min-width: 40rem) {
