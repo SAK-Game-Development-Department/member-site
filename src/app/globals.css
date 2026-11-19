@@ -700,7 +700,7 @@ body {
   margin-top: calc(var(--beat) * 3);
   margin-bottom: calc(var(--beat) * 1);
 }
-/* 本文は字の色そのもの。注記は沈んだ色（--note）に降ろす */
+/* 本文も注記も字の色は同じ。注記は大きさと字間だけで下げる（全か無か） */
 .doc p,
 .doc li {
   font-size: 1.125rem;
@@ -733,7 +733,7 @@ body {
 .doc ol.steps {
   margin-block: calc(var(--beat) * 2);
 }
-/* 施行日など、落ちた注記の小さな字 */
+/* 施行日など、注記の小さな字 */
 .doc p.note {
   margin-top: calc(var(--beat) * 3);
   font-size: 1rem;
