@@ -25,9 +25,10 @@ export const buttonClass =
 export const sectionLabelClass =
   "flex items-baseline gap-[0.9rem] text-[0.7rem] font-bold tracking-[0.35em] text-uni";
 
-// .section-label-number: 章番号は輪郭の大書（第四条）。前傾（第九条）
+// .section-label-number: 章番号は輪郭の大書（第四条）。前傾（第九条）。
+// v2: 3.6remに拡大して章の頭のリズムを強く
 export const sectionLabelNumberClass =
-  "outline-ink font-black italic text-[2.25rem] leading-none";
+  "outline-ink font-black italic text-[3.6rem] leading-none";
 
 // .eyebrow: 小見出しラベル。直立・制服色
 export const eyebrowClass =
