@@ -3,12 +3,11 @@
 import { useEffect } from "react";
 
 /**
- * 画面内に入ったセクション・カードをふわっと表示する。
- * 対象は `data-reveal` 属性を持つ要素。表示状態は `data-reveal` の値
- * （"hidden" → "visible"）で管理し、見た目は Tailwind の
- * `data-[reveal=hidden]:` バリアントで指定する。
+ * 章は一度見えたら隠さない（第八条）。
+ * data-reveal 属性を持つ要素を IntersectionObserver で一度だけ可視にする。
+ * 見た目は globals.css の [data-reveal] 規則が担う（opacityとtranslate、2拍）。
  */
-export default function ScrollReveal() {
+export function ScrollReveal() {
   useEffect(() => {
     const targets = document.querySelectorAll<HTMLElement>("[data-reveal]");
 
