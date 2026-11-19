@@ -22,7 +22,7 @@ export function DocsLayout({
       <aside className="hidden lg:block w-72 shrink-0 sticky top-[4.5rem] h-[calc(100vh-4.5rem)] overflow-y-auto border-r border-border dark:border-border-dark px-[0.9rem] py-[1.8rem]">
         {sidebar.map((s) => (
           <div key={s.title} className="mb-[1.35rem]">
-            <p className="px-[0.9rem] mb-[0.45rem] text-sm font-bold tracking-[0.18em] text-uni dark:text-link-dark">
+            <p className="px-[0.9rem] mb-[0.45rem] text-sm font-black tracking-[0.3em] text-uni dark:text-primary-dark">
               {s.title}
             </p>
             <ul>
@@ -71,7 +71,7 @@ function PagerLink({
       href={item.href}
       className={`block p-[1.35rem] border-[1.5px] border-border dark:border-border-dark hover:opacity-60 ${right ? "text-right" : ""}`}
     >
-      <span className="block text-sm text-uni dark:text-link-dark">
+      <span className="block text-sm font-black tracking-[0.3em] text-uni dark:text-primary-dark">
         {label}
       </span>
       <span className="font-bold italic text-lg text-primary dark:text-primary-dark">

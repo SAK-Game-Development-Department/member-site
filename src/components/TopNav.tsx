@@ -50,7 +50,7 @@ export function TopNav() {
           {site.name}
         </Link>
         <div className="hidden lg:flex flex-1 justify-center">
-          <span className="text-sm tracking-[0.18em] text-uni dark:text-link-dark">
+          <span className="text-sm font-black tracking-[0.3em] text-uni dark:text-primary-dark">
             {site.tagline}
           </span>
         </div>
@@ -97,7 +97,7 @@ export function TopNav() {
         </button>
         <a
           href={site.github}
-          className="p-[0.45rem] text-sm font-bold tracking-[0.18em] hover:opacity-60"
+          className="p-[0.45rem] text-sm font-black tracking-[0.3em] hover:opacity-60"
         >
           GitHub
         </a>
@@ -106,7 +106,7 @@ export function TopNav() {
         <div className="lg:hidden max-h-[calc(100vh-4.5rem)] overflow-y-auto border-t border-border dark:border-border-dark px-[0.9rem] py-[0.9rem]">
           {[...learnSidebar, ...communitySidebar].map((s) => (
             <div key={s.title} className="mb-[0.9rem]">
-              <p className="px-[0.9rem] mb-[0.45rem] text-sm font-bold tracking-[0.18em] text-uni dark:text-link-dark">
+              <p className="px-[0.9rem] mb-[0.45rem] text-sm font-black tracking-[0.3em] text-uni dark:text-primary-dark">
                 {s.title}
               </p>
               {s.items.map((i) => (

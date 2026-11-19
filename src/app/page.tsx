@@ -79,10 +79,10 @@ export default function Home() {
       <section className="px-[1.35rem] pt-[4.5rem] lg:pt-[8.1rem] pb-[5.4rem] text-center">
         <div data-reveal>
           <Logo className="w-[7.2rem] h-[7.2rem] lg:w-[9rem] lg:h-[9rem] mx-auto text-primary dark:text-primary-dark" />
-          <h1 className="mt-[1.8rem] font-black italic text-6xl lg:text-8xl leading-tight">
+          <h1 className="mt-[1.8rem] font-black italic text-5xl lg:text-7xl leading-tight">
             {site.name}
           </h1>
-          <p className="mt-[1.35rem] text-sm tracking-[0.3em] text-uni dark:text-link-dark">
+          <p className="mt-[1.35rem] text-sm font-black tracking-[0.3em] text-uni dark:text-primary-dark">
             {site.tagline}
           </p>
           <p className="mt-[1.8rem] text-2xl lg:text-4xl leading-snug">
@@ -150,7 +150,7 @@ export default function Home() {
               href="/blog"
               className="block border-[1.5px] border-border dark:border-border-dark p-[1.35rem] hover:opacity-60"
             >
-              <time className="text-sm text-uni dark:text-link-dark">
+              <time className="text-sm font-black tracking-[0.3em] text-uni dark:text-primary-dark">
                 {p.date}
               </time>
               <h3 className="mt-[0.45rem] text-xl font-bold italic">

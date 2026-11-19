@@ -51,7 +51,7 @@ async function TeamMember({ m }: { m: Member }) {
         <div aria-hidden="true" className="w-[10.8rem] h-[10.8rem] shrink-0 border-[3px] border-ink dark:border-ground bg-card dark:bg-card-dark grid place-items-center text-5xl text-secondary dark:text-secondary-dark">?</div>
         <div className="flex-1">
           <h3 className="mt-0! mb-0! font-black italic text-3xl!">未定</h3>
-          <p className="my-[0.45rem]! font-medium text-base! text-uni dark:text-link-dark">{m.role}</p>
+          <p className="my-[0.45rem]! font-medium text-base! tracking-[0.3em] text-uni dark:text-primary-dark">{m.role}</p>
         </div>
       </div>
     );
@@ -66,7 +66,7 @@ async function TeamMember({ m }: { m: Member }) {
       <img src={p.avatar} alt="" className="w-[10.8rem] h-[10.8rem] shrink-0 border-[3px] border-ink dark:border-ground object-cover bg-card dark:bg-card-dark" />
       <div className="flex-1">
         <h3 className="mt-0! mb-0! font-black italic text-3xl!">{p.name}</h3>
-        <p className="my-[0.45rem]! font-medium text-base! text-uni dark:text-link-dark">{m.role}</p>
+        <p className="my-[0.45rem]! font-medium text-base! tracking-[0.3em] text-uni dark:text-primary-dark">{m.role}</p>
         {p.bio && <p className="mt-[0.9rem]! mb-[0.9rem]! whitespace-pre-line">{p.bio}</p>}
         <div className="flex flex-wrap gap-x-[1.35rem] gap-y-[0.45rem] mt-[0.9rem]">
           {links.map((l) => (

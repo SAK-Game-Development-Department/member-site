@@ -17,7 +17,7 @@ export default function Page() {
             key={p.title}
             className="border-t-[1.5px] border-border dark:border-border-dark pt-[1.35rem]"
           >
-            <time className="text-sm text-uni dark:text-link-dark">
+            <time className="text-sm font-black tracking-[0.3em] text-uni dark:text-primary-dark">
               {p.date}
             </time>
             <h2 className="mt-[0.45rem] text-2xl font-black italic">
